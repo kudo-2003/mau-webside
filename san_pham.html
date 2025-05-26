@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản Phẩm | Fresh Food</title>
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        /* Navigation Styles */
+        header {
+            background: linear-gradient(135deg, #2c5530 0%, #4CAF50 100%);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-input {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 0.9rem;
+            outline: none;
+            width: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            background: white;
+            width: 250px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-icon {
+            position: relative;
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .cart-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        /* Products Container */
+        .products-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            min-height: calc(100vh - 140px);
+        }
+
+        .products h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #2c5530;
+            margin-bottom: 3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .products h1::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #4CAF50, #81C784);
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #2c5530;
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+            min-width: 150px;
+        }
+
+        .filter-select:focus {
+            border-color: #4CAF50;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Product Card */
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: #4CAF50;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .product-badge.sale {
+            background: #e74c3c;
+        }
+
+        .product-badge.new {
+            background: #3498db;
+        }
+
+        .product-badge.fresh {
+            background: #27ae60;
+        }
+
+        /* Product Info */
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c5530;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .product-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .product-price {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .current-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #4CAF50;
+        }
+
+        .original-price {
+            font-size: 1rem;
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .discount {
+            background: #e74c3c;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Product Actions */
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+            padding: 8px 14px;
+        }
+
+        .btn-secondary:hover {
+            background: #4CAF50;
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c5530;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: auto;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .products-container {
+                padding: 1rem;
+            }
+            
+            .products h1 {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1.5rem;
+            }
+            
+            .filter-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+
+            .search-input {
+                width: 150px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .products h1 {
+                font-size: 1.8rem;
+            }
+            
+            .product-info {
+                padding: 1rem;
+            }
+            
+            .product-actions {
+                flex-direction: column;
+            }
+
+            .nav-container {
+                justify-content: center;
+            }
+
+            .nav-actions {
+                order: -1;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-container">
+                <a href="#" class="logo">
+                    <div class="logo-icon">🥬</div>
+                    Fresh Food
+                </a>
+                <ul class="nav-menu">
+                    <li><a href="#" class="nav-link">Trang Chủ</a></li>
+                    <li><a href="#" class="nav-link active">Sản Phẩm</a></li>
+                    <li><a href="#" class="nav-link">Về Chúng Tôi</a></li>
+                    <li><a href="#" class="nav-link">Liên Hệ</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <input type="text" class="search-input" placeholder="Tìm kiếm sản phẩm...">
+                    <a href="#" class="cart-icon">
+                        🛒
+                        <span class="cart-count">3</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="products-container">
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label>Loại sản phẩm</label>
+                    <select class="filter-select">
+                        <option>Tất cả sản phẩm</option>
+                        <option>Rau củ</option>
+                        <option>Trái cây</option>
+                        <option>Thịt tươi</option>
+                        <option>Hải sản</option>
+                        <option>Thực phẩm khô</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Giá tiền</label>
+                    <select class="filter-select">
+                        <option>Tất cả mức giá</option>
+                        <option>Dưới 50,000đ</option>
+                        <option>50,000đ - 100,000đ</option>
+                        <option>100,000đ - 200,000đ</option>
+                        <option>Trên 200,000đ</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Sắp xếp</label>
+                    <select class="filter-select">
+                        <option>Mới nhất</option>
+                        <option>Giá thấp đến cao</option>
+                        <option>Giá cao đến thấp</option>
+                        <option>Bán chạy nhất</option>
+                        <option>Đánh giá cao</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <section class="products">
+            <h1>Tất Cả Sản Phẩm</h1>
+            <div class="product-grid">
+                <!-- Rau củ -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=300&h=220&fit=crop" alt="Cà chua cherry">
+                        <span class="product-badge fresh">Tươi</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Cà Chua Cherry Đà Lạt</h3>
+                        <p class="product-description">Cà chua cherry tươi ngon, ngọt tự nhiên từ Đà Lạt. Giàu vitamin C và chất chống oxi hóa.</p>
+                        <div class="product-price">
+                            <span class="current-price">45,000đ</span>
+                            <span class="original-price">55,000đ</span>
+                            <span class="discount">-18%</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary">Thêm vào giỏ</button>
+                            <button class="btn btn-secondary">♡</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1590779033100-9f60a05a013d?w=300&h=220&fit=crop" alt="Rau cải xanh">
+                        <span class="product-badge new">Mới</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Rau Cải Xanh Hữu Cơ</h3>
+                        <p class="product-description">Rau cải xanh tươi ngon, trồng theo phương pháp hữu cơ, không thuốc trừ sâu.</p>
+                        <div class="product-price">
+                            <span class="current-price">25,000đ</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary">Thêm vào giỏ</button>
+                            <button class="btn btn-secondary">♡</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=300&h=220&fit=crop" alt="Ớt chuông">
+                        <span class="product-badge sale">Giảm giá</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Ớt Chuông Ba Màu</h3>
+                        <p class="product-description">Ớt chuông tươi ngon với 3 màu sắc rực rỡ, giàu vitamin A và C.</p>
+                        <div class="product-price">
+                            <span class="current-price">65,000đ</span>
+                            <span class="original-price">85,000đ</span>
+                            <span class="discount">-24%</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary">Thêm vào giỏ</button>
+                            <button class="btn btn-secondary">♡</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trái cây -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=300&h=220&fit=crop" alt="Táo Fuji">
+                        <span class="product-badge fresh">Tươi</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Táo Fuji Nhật Bản</h3>
+                        <p class="product-description">Táo Fuji nhập khẩu từ Nhật Bản, giòn ngọt, thơm ngon tự nhiên.</p>
+                        <div class="product-price">
+                            <span class="current-price">120,000đ</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary">Thêm vào giỏ</button>
+                            <button class="btn btn-secondary">♡</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=300&h=220&fit=crop" alt="Cam sành">
+                        <span class="product-badge sale">Khuyến mãi</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Cam Sành Cao Phong</h3>
+                        <p class="product-description">Cam sành Cao Phong nổi tiếng, vị ngọt thanh, nhiều nước và vitamin C.</p>
+                        <div class="product-price">
+                            <span class="current-price">35,000đ</span>
+                            <span class="original-price">45,000đ</span>
+                            <span class="discount">-22%</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary">Thêm vào giỏ</button>
+                            <button class="btn btn-secondary">♡</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1574856344991-aaa31b6f4ce3?w=300&h=220&fit=crop" alt="Chuối tiêu">
+                        <span class="product-badge fresh">Organic</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Chuối Tiêu Hữu Cơ</h3>
+                        <p class="product-description">Chuối tiêu hữu cơ thơm ngon, giàu kali và chất xơ tốt cho sức khỏe.</p>
+                        <div class="product-price">
+                            <span class="current-price">28,000đ</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary">Thêm vào giỏ</button>
+                            <button class="btn btn-secondary">♡</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thịt tươi -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=300&h=220&fit=crop" alt="Thịt bò">
+                        <span class="product-badge new">Mới về</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Thịt Bò Úc Nhập Khẩu</h3>
+                        <p class="product-description">Thịt bò tươi nhập khẩu từ Úc, chất lượng cao, thịt mềm ngon.</p>
+                        <div class="product-price">
+                            <span class="current-price">285,000đ</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary">Thêm vào giỏ</button>
+                            <button class="btn btn-secondary">♡</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1549740425-5e9ed4d8cd34?w=300&h=220&fit=crop" alt="Thịt heo">
+                        <span class="product-badge fresh">Tươi sạch</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Thịt Heo Ba Chỉ Sạch</h3>
+                        <p class="product-description">Thịt heo ba chỉ từ trang trại sạch, đảm bảo vệ sinh an toàn thực phẩm.</p>
+                        <div class="product-price">
+                            <span class="current-price">165,000đ</span>
+                            <span class="original-price">180,000đ</span>
+                            <span class="discount">-8%</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary">Thêm vào giỏ</button>
+                            <button class="btn btn-secondary">♡</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hải sản -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1544943910-4c1dc44aab44?w=300&h=220&fit=crop" alt="Cá hồi">
+                        <span class="product-badge sale">Hot</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Cá Hồi Na Uy Tươi</h3>
+                        <p class="product-description">Cá hồi tươi nhập khẩu từ Na Uy, giàu Omega-3, thịt thơm ngon.</p>
+                        <div class="product-price">
+                            <span class="current-price">320,000đ</span>
+                            <span class="original-price">380,000đ</span>
+                            <span class="discount">-16%</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary">Thêm vào giỏ</button>
+                            <button class="btn btn-secondary">♡</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=300&h=220&fit=crop" alt="Tôm sú">
+                        <span class="product-badge fresh">Sống</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Tôm Sú Sống Cà Mau</h3>
+                        <p class="product-description">Tôm sú sống từ Cà Mau, tươi ngon với thịt chắc ngọt tự nhiên.</p>
+                        <div class="product-price">
+                            <span class="current-price">185,000đ</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary">Thêm vào giỏ</button>
+                            <button class="btn btn-secondary">♡</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thực phẩm khô -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300&h=220&fit=crop" alt="Gạo">
+                        <span class="product-badge">Hàng đặc biệt</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Gạo ST25 Đặc Sản</h3>
+                        <p class="product-description">Gạo ST25 đạt giải thưởng gạo ngon nhất thế giới, hạt dài thơm ngon.</p>
+                        <div class="product-price">
+                            <span class="current-price">95,000đ</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary">Thêm vào giỏ</button>
+                            <button class="btn btn-secondary">♡</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Fresh Food. Tất cả quyền được bảo lưu.</p>
+    </footer>
+
+    <script>
+        // Simple cart functionality
+        let cartCount = 3;
+        
+        document.querySelectorAll('.btn-primary').forEach(button => {
+            button.addEventListener('click', function() {
+                cartCount++;
+                document.querySelector('.cart-count').textContent = cartCount;
+                
+                // Add animation effect
+                this.textContent = 'Đã thêm!';
+                this.style.background = '#27ae60';
+                
+                setTimeout(() => {
+                    this.textContent = 'Thêm vào giỏ';
+                    this.style.background = '#4CAF50';
+                }, 1000);
+            });
+        });
+
+        // Heart/Wishlist functionality
+        document.querySelectorAll('.btn-secondary').forEach(button => {
+            button.addEventListener('click', function() {
+                if (this.textContent === '♡') {
+                    this.textContent = '♥';
+                    this.style.color = '#e74c3c';
+                    this.style.borderColor = '#e74c3c';
+                } else {
+                    this.textContent = '♡';
+                    this.style.color = '#4CAF50';
+                    this.style.borderColor = '#4CAF50';
+                }
+            });
+        });
+
+        // Search functionality
+        document.querySelector('.search-input').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const productCards = document.querySelectorAll('.product-card');
+            
+            productCards.forEach(card => {
+                const productName = card.querySelector('.product-name
